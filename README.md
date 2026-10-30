@@ -30,7 +30,7 @@ This repository serves as a programming portfolio showcasing the core C++ archit
 
 \* Advanced Player Locomotion & Combat: Built state-driven movement mechanics encompassing multi-directional navigation, combat dodging, self-healing, and precise fall damage calculations that trigger hard-landing animations upon exceeding height thresholds.
 
-* Dynamic Inventory & Overlap Logic: Programmed automatic item acquisition for health potions, spawned chest treasures, and defeated enemy souls using overlap events, alongside input-driven weapon equipping.
+\* Dynamic Inventory & Overlap Logic: Programmed automatic item acquisition for health potions, spawned chest treasures, and defeated enemy souls using overlap events, alongside input-driven weapon equipping.
 
 \* Quest & Objective Engineering: Developed a time-sensitive quest acceptance system featuring a custom UI prompt (holding TAB for 2 seconds within a 15-second window), paired with dynamic objective tracking and an interactive Journal system to read and store discovered notes.
 
