@@ -1,0 +1,10 @@
+Binaries/
+DerivedDataCache/
+Intermediate/
+Saved/
+.vs/
+Build/
+Slash.sln
+.vsconfig
+Content/
+Assets/
