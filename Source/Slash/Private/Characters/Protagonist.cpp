@@ -213,9 +213,22 @@ void AProtagonist::Jump()
 
 void AProtagonist::GetHit_Implementation(const FVector& ImpactPoint, AActor* Hitter)
 {
+
+	bool bWasInteracting = false;
+
+	PendingLever = nullptr;
+	PendingLadder = nullptr;
+	PendingPlatform = nullptr;
+
+	if (bJournalOpen)
+	{
+		ToggleJournal();
+	}
+
 	if (InteractingChest)
 	{
 		CancelChestInteraction();
+		bWasInteracting = true;
 	}
 
 	if (CurrentLadder)
@@ -224,10 +237,59 @@ void AProtagonist::GetHit_Implementation(const FVector& ImpactPoint, AActor* Hit
 		bIsStepping = false;
 		GetCharacterMovement()->SetMovementMode(MOVE_Falling);
 		GetCharacterMovement()->bOrientRotationToMovement = true;
+		bWasInteracting = true;
+	}
+
+	if (bInspecting)
+	{
+		EndInspection();
+	}
+
+	if (CurrentOldMachine)
+	{
+		CurrentOldMachine->ResetIncompleteInteraction(this);
+		CurrentOldMachine->StopSplitCaptures();
+		CurrentOldMachine = nullptr;
+		bWasInteracting = true;
+	}
+
+	if (CurrentLever)
+	{
+		CurrentLever->OnLeverRotationFinished.RemoveAll(this);
+		CurrentLever->RefreshInteractionPrompt(this);
+		CurrentLever = nullptr;
+		bWasInteracting = true;
+	}
+
+	if (InteractingPlatform)
+	{
+		InteractingPlatform->ReceivePushInput(0.f);
+		InteractingPlatform->SetIsInteractable(true);
+		InteractingPlatform->ResetPushState();
+		InteractingPlatform = nullptr;
+		bWasInteracting = true;
+	}
+
+	if (bWasInteracting)
+	{
+		EnableCharacterMovement(true);
+
+		if (APlayerController* PC = Cast<APlayerController>(GetController()))
+		{
+			PC->SetViewTarget(this);
+		}
+
+		if (AGameHUD* GameHUD = Cast<AGameHUD>(GetWorld()->GetFirstPlayerController()->GetHUD()))
+		{
+			GameHUD->HideLeverControls();
+			GameHUD->HideOldMachineSplitView();
+			GameHUD->ShowGameplayHUD();
+		}
 	}
 
 	Super::GetHit_Implementation(ImpactPoint, Hitter);
 	SetWeaponCollisionEnabled(ECollisionEnabled::NoCollision);
+
 	if (Attributes && Attributes->GetHealthPercent() > 0.f)
 	{
 		ActionState = EActionState::EAS_HitReaction;
@@ -588,6 +650,11 @@ void AProtagonist::HandlePushStartNotify()
 
 void AProtagonist::OnInitialPushFinished()
 {
+	if (ActionState != EActionState::EAS_Pushing)
+	{
+		return;
+	}
+
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 	if (AnimInstance && PushingLoopMontage)
 	{
@@ -605,6 +672,11 @@ void AProtagonist::OnInitialPushFinished()
 
 void AProtagonist::FinishPushing()
 {
+	if (ActionState != EActionState::EAS_Pushing)
+	{
+		return;
+	}
+
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 	if (AnimInstance && PushStopMontage)
 	{
@@ -1826,7 +1898,10 @@ void AProtagonist::OnReachedInteractionPoint()
 		return;		
 	}
 
-	PlayChestOpenMontage();
+	if (InteractingChest)
+	{
+		PlayChestOpenMontage();
+	}
 }
 
 void AProtagonist::ToggleJournal()

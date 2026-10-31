@@ -267,6 +267,31 @@ void ACratePlatform::ReceivePushInput(float Value)
 void ACratePlatform::StartInitialPush()
 {
 	CurrentPushState = EPushState::EPS_InitialPush;
+
+	FVector CurrentLoc = GetActorLocation();
+
+	float DistToStop = FVector::Distance(
+		CurrentLoc,
+		StopPushLocation
+	);
+
+	float StepDist = InitialPushOffset.Size();
+
+	if (StepDist >= DistToStop)
+	{
+		InitialPushLocation = StopPushLocation;
+	}
+
+	else
+	{
+		InitialPushLocation = CurrentLoc + InitialPushOffset;
+	}
+}
+
+void ACratePlatform::ResetPushState()
+{
+	CurrentPushState = EPushState::EPS_Idle;
+	PushingProtagonist = nullptr;
 }
 
 void ACratePlatform::SetIsInteractable(bool bInteractable)

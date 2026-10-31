@@ -49,6 +49,12 @@ void UGameOver::SetGameOverInput()
 	if (AGameHUD* GameHUD = Cast<AGameHUD>(GetWorld()->GetFirstPlayerController()->GetHUD()))
 	{
 		GameHUD->SetObjectiveTrackerSuppressed(true);
+		GameHUD->HideLeverControls();
+		GameHUD->HideOldMachineSplitView();
+		GameHUD->HideQuestOffer();
+		GameHUD->HideInspection();
+		GameHUD->HideJournal();
+		GameHUD->HideGameplayHUD();
 	}
 
 	FInputModeUIOnly InputMode;

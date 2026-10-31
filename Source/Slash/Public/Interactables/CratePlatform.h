@@ -28,6 +28,7 @@ public:
 	void ReceivePushInput(float Value);
 
 	void StartInitialPush();
+	void ResetPushState();
 
 	UFUNCTION(BlueprintCallable, Category = "Interaction")
 	void SetIsInteractable(bool bInteractable);
