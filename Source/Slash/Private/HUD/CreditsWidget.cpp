@@ -66,6 +66,17 @@ FReply UCreditsWidget::NativeOnKeyUp(const FGeometry& InGeometry, const FKeyEven
 	return Super::NativeOnKeyUp(InGeometry, InKeyEvent);
 }
 
+void UCreditsWidget::OnAnimationFinished_Implementation(const UWidgetAnimation* Animation)
+{
+	Super::OnAnimationFinished_Implementation(Animation);
+
+	if (Animation == CreditsRollAnimation && !bHasQuit)
+	{
+		bHasQuit = true;
+		OnCreditsFinished();
+	}
+}
+
 void UCreditsWidget::OnCreditsFinished()
 {
 	if (APlayerController* PC = GetWorld()->GetFirstPlayerController())

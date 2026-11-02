@@ -22,6 +22,8 @@ protected:
 	virtual FReply NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent) override;
 	virtual FReply NativeOnKeyUp(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent) override;
 
+	virtual void OnAnimationFinished_Implementation(const UWidgetAnimation* Animation) override;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Credits")
 	class USoundBase* CreditsMusic;
 
