@@ -9,6 +9,8 @@
 #include "Navigation/PathFollowingComponent.h"
 #include "Components/AttributeComponent.h"
 #include "HUD/HealthBarComponent.h"
+#include "Characters/Protagonist.h"
+#include "Kismet/GameplayStatics.h"
 #include "Items/Weapons/Weapon.h"
 #include "Items/Soul.h"
 #include "Items/KeyItem.h"
@@ -111,6 +113,49 @@ void AEnemy::GetHit_Implementation(const FVector& ImpactPoint, AActor* Hitter)
 
 /** PROTECTED FUNCTIONS */
 
+void AEnemy::HandleCinematicState(bool bIsCinematic)
+{
+	if (isDead())
+	{
+		return;
+	}
+
+	if (bIsCinematic)
+	{
+		CombatTarget = nullptr;
+		ClearAttackTimer();
+		ClearPatrolTimer();
+		StopAttackMontage();
+		HideHealthBar();
+		
+		if (EnemyController)
+		{
+			EnemyController->StopMovement();
+		}
+
+		SetActorHiddenInGame(true);
+		SetActorEnableCollision(false);
+
+		if (EquippedWeapon)
+		{
+			EquippedWeapon->SetActorHiddenInGame(true);
+		}
+	}
+
+	else
+	{
+		SetActorHiddenInGame(false);
+		SetActorEnableCollision(true);
+
+		if (EquippedWeapon)
+		{
+			EquippedWeapon->SetActorHiddenInGame(false);
+		}
+
+		StartPatrolling();
+	}
+}
+
 void AEnemy::BeginPlay()
 {
 	Super::BeginPlay();
@@ -119,6 +164,14 @@ void AEnemy::BeginPlay()
 		PawnSensing->OnSeePawn.AddDynamic(this, &AEnemy::PawnSeen);
 	InitializeEnemy();
 	Tags.Add(FName("Enemy"));
+
+	if (AProtagonist* Player = Cast<AProtagonist>(UGameplayStatics::GetPlayerCharacter(this, 0)))
+	{
+		Player->OnCinematicStateToggled.AddDynamic(
+			this, 
+			&AEnemy::HandleCinematicState
+		);
+	}
 }
 
 void AEnemy::Die_Implementation()

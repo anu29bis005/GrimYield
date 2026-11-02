@@ -1751,6 +1751,8 @@ void AProtagonist::BeginCinematicState()
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	SetEquippedWeaponVisibility(false);
 
+	Tags.Remove(FName("EngageableTarget"));
+
 	if (AGameHUD* GameHUD = Cast<AGameHUD>(GetWorld()->GetFirstPlayerController()->GetHUD()))
 	{
 		GameHUD->SetObjectiveTrackerSuppressed(true);
@@ -1770,6 +1772,8 @@ void AProtagonist::EndCinematicState()
 	SetActorHiddenInGame(false);
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	SetEquippedWeaponVisibility(true);
+
+	Tags.AddUnique(FName("EngageableTarget"));
 
 	if (AGameHUD* GameHUD = Cast<AGameHUD>(GetWorld()->GetFirstPlayerController()->GetHUD()))
 	{

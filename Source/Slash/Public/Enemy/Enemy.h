@@ -40,6 +40,9 @@ public:
 
 protected:
 
+	UFUNCTION()
+	void HandleCinematicState(bool bIsCinematic);
+
 	/** <AActor> */
 	virtual void BeginPlay() override;
 	/** </AActor> */
