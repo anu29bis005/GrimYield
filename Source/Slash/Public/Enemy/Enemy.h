@@ -112,10 +112,10 @@ private:
 	UPROPERTY()
 	class AAIController* EnemyController;
 
-	UPROPERTY(EditInstanceOnly, Category = "AI Navigation")
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, meta = (ExposeOnSpawn = "true", AllowPrivateAccess = "true"), Category = "AI Navigation")
 	AActor* CurrentPatrolTarget;	// Current Patrol Target
 
-	UPROPERTY(EditInstanceOnly, Category = "AI Navigation");
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, meta = (ExposeOnSpawn = "true", AllowPrivateAccess = "true"), Category = "AI Navigation")
 	TArray<AActor*> PatrolTargets;		// Array of patrol targets
 
 	UPROPERTY(EditAnywhere)

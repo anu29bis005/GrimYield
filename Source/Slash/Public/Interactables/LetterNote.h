@@ -13,6 +13,7 @@ class UBoxComponent;
 class UWidgetComponent;
 class UTexture2D;
 class AProtagonist;
+class AEnemy;
 
 UENUM(BlueprintType)
 enum class ELetterNoteType : uint8
@@ -39,6 +40,8 @@ protected:
 
 	virtual void BeginPlay() override;
 
+	UFUNCTION()
+	void OnGuardianDeath();
 
 private:
 
@@ -80,6 +83,11 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Interaction")
 	EInteractionType InteractionType = EInteractionType::EIT_Read;
+
+private:
+
+	UPROPERTY(EditInstanceOnly, Category = "Interaction")
+	AEnemy* GuardianEnemy;
 
 public:	
 

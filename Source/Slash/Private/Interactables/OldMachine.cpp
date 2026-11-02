@@ -1,5 +1,5 @@
-#include "Interactables/OldMachine.h"
 
+#include "Interactables/OldMachine.h"
 #include "Components/SceneComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/BoxComponent.h"
@@ -414,7 +414,12 @@ bool AOldMachine::canPlayerUseMachine(const AProtagonist* Player) const
 		return false;
 	}
 
-	return QuestComponent->HasReadSecondNote();
+	if (QuestComponent->GetQuestState() == EQuestState::EQS_Active)
+	{
+		return QuestComponent->HasReadSecondNote();
+	}
+	
+	return true;
 }
 
 void AOldMachine::HandleIronGateFullyOpened()

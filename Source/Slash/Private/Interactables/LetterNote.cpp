@@ -6,6 +6,7 @@
 #include "Components/BoxComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/WidgetComponent.h"
+#include "Enemy/Enemy.h"
 
 ALetterNote::ALetterNote()
 {
@@ -35,10 +36,23 @@ void ALetterNote::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	InteractionBox->OnComponentBeginOverlap.AddDynamic(this, &ALetterNote::OnBoxBeginOverlap);
+	InteractionBox->OnComponentBeginOverlap.AddDynamic(
+		this, 
+		&ALetterNote::OnBoxBeginOverlap
+	);
+	InteractionBox->OnComponentEndOverlap.AddDynamic(
+		this, 
+		&ALetterNote::OnBoxEndOverlap
+	);
 
-	InteractionBox->OnComponentEndOverlap.AddDynamic(this, &ALetterNote::OnBoxEndOverlap);
-
+	if (GuardianEnemy)
+	{
+		InteractionBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		GuardianEnemy->OnEnemyDeath.AddDynamic(
+			this,
+			&ALetterNote::OnGuardianDeath
+		);
+	}
 	if (InteractionWidget)
 	{
 		if (UInteractionPromptWidget* PromptWidget =
@@ -47,6 +61,14 @@ void ALetterNote::BeginPlay()
 		{
 			PromptWidget->SetInteractionType(InteractionType);
 		}
+	}
+}
+
+void ALetterNote::OnGuardianDeath()
+{
+	if (InteractionBox)
+	{
+		InteractionBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	}
 }
 
