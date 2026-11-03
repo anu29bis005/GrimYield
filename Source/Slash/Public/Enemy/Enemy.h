@@ -25,6 +25,9 @@ public:
 	
 	AEnemy();
 
+	UFUNCTION(BlueprintCallable, Category = "Cinematics")
+	void SetEnemyCinematicHidden(bool bIsHidden);
+
 	UPROPERTY(BlueprintAssignable, Category = "Combat")
 	FOnEnemyDeath OnEnemyDeath;
 

@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -18,8 +17,8 @@ UCLASS()
 class SLASH_API ACratePlatform : public AActor, public IInteractInterface
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 
 	ACratePlatform();
 	virtual void Tick(float DeltaTime) override;
@@ -36,7 +35,7 @@ public:
 protected:
 
 	virtual void BeginPlay() override;
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interaction")
 	bool bIsInteractable = true;
 
@@ -124,11 +123,9 @@ private:
 	UPROPERTY()
 	AProtagonist* PushingProtagonist;
 
-public:	
+public:
 
 	FVector GetInteractionLocation() const;
 	FRotator GetInteractionRotation() const;
-
-
 
 };

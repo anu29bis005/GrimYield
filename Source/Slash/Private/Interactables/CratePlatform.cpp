@@ -1,4 +1,3 @@
-
 #include "Interactables/CratePlatform.h"
 #include "Components/BoxComponent.h"
 #include "Components/StaticMeshComponent.h"
@@ -11,7 +10,7 @@
 
 ACratePlatform::ACratePlatform()
 {
- 	
+
 	PrimaryActorTick.bCanEverTick = true;
 
 	PlatformMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PlatformMesh"));
@@ -28,12 +27,12 @@ ACratePlatform::ACratePlatform()
 	InteractionPoint->SetupAttachment(GetRootComponent());
 
 	PushInteractionBox->OnComponentBeginOverlap.AddDynamic(
-		this, 
+		this,
 		&ACratePlatform::OnBoxOverlap
 	);
-	
+
 	PushInteractionBox->OnComponentEndOverlap.AddDynamic(
-		this, 
+		this,
 		&ACratePlatform::OnBoxEndOverlap
 	);
 
@@ -58,7 +57,7 @@ void ACratePlatform::BeginPlay()
 		this,
 		&ACratePlatform::OnElevatorOverlap
 	);
-	
+
 }
 
 void ACratePlatform::OnBoxOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -87,7 +86,7 @@ void ACratePlatform::OnBoxOverlap(UPrimitiveComponent* OverlappedComponent, AAct
 	}
 }
 
-void ACratePlatform::OnBoxEndOverlap(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex)
+void ACratePlatform::OnBoxEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 	if (CurrentPushState != EPushState::EPS_Idle)
 	{
@@ -254,6 +253,8 @@ void ACratePlatform::Interact(AProtagonist* Protagonist)
 		InteractionWidget->SetVisibility(false);
 	}
 
+	SetIsInteractable(false);
+
 	PushingProtagonist = Protagonist;
 
 	PushingProtagonist->BeginPushing(this);
@@ -298,4 +299,3 @@ void ACratePlatform::SetIsInteractable(bool bInteractable)
 {
 	bIsInteractable = bInteractable;
 }
-

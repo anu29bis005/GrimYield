@@ -41,6 +41,40 @@ AEnemy::AEnemy()
 
 }
 
+void AEnemy::SetEnemyCinematicHidden(bool bIsHidden)
+{
+	if (isDead())
+	{
+		return;
+	}
+
+	if (bIsHidden)
+	{
+		ClearPatrolTimer();
+		if (EnemyController)
+		{
+			EnemyController->StopMovement();
+		}
+		SetActorHiddenInGame(true);
+		SetActorEnableCollision(false);
+		if (EquippedWeapon)
+		{
+			EquippedWeapon->SetActorHiddenInGame(true);
+		}
+	}
+
+	else
+	{
+		SetActorHiddenInGame(false);
+		SetActorEnableCollision(true);
+		if (EquippedWeapon)
+		{
+			EquippedWeapon->SetActorHiddenInGame(false);
+		}
+		StartPatrolling();
+	}
+}
+
 void AEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -124,34 +158,8 @@ void AEnemy::HandleCinematicState(bool bIsCinematic)
 	{
 		CombatTarget = nullptr;
 		ClearAttackTimer();
-		ClearPatrolTimer();
 		StopAttackMontage();
-		HideHealthBar();
-		
-		if (EnemyController)
-		{
-			EnemyController->StopMovement();
-		}
-
-		SetActorHiddenInGame(true);
-		SetActorEnableCollision(false);
-
-		if (EquippedWeapon)
-		{
-			EquippedWeapon->SetActorHiddenInGame(true);
-		}
-	}
-
-	else
-	{
-		SetActorHiddenInGame(false);
-		SetActorEnableCollision(true);
-
-		if (EquippedWeapon)
-		{
-			EquippedWeapon->SetActorHiddenInGame(false);
-		}
-
+		LoseInterest();
 		StartPatrolling();
 	}
 }

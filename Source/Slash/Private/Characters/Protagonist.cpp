@@ -1908,6 +1908,7 @@ void AProtagonist::OnReachedInteractionPoint()
 	}
 }
 
+
 void AProtagonist::ToggleJournal()
 {
 	APlayerController* PC = Cast<APlayerController>(GetController());
