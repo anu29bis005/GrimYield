@@ -56,6 +56,9 @@ AProtagonist::AProtagonist()
 	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldDynamic, ECollisionResponse::ECR_Overlap);
 	GetMesh()->SetGenerateOverlapEvents(true);
 
+	GetCapsuleComponent()->CanCharacterStepUpOn = ECB_No;
+	GetMesh()->CanCharacterStepUpOn = ECB_No;
+
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	CameraBoom->SetupAttachment(GetRootComponent());
 	CameraBoom->TargetArmLength = 300.f;

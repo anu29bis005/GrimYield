@@ -4,6 +4,7 @@
 #include "Enemy/Enemy.h"
 #include "AIController.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Perception/PawnSensingComponent.h"
 #include "Navigation/PathFollowingComponent.h"
@@ -25,7 +26,6 @@ AEnemy::AEnemy()
 	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
 	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 	GetMesh()->SetGenerateOverlapEvents(true);
-	
 
 	HealthBarWdgt = CreateDefaultSubobject<UHealthBarComponent>(TEXT("HealthBar"));
 	HealthBarWdgt->SetupAttachment(GetRootComponent());
@@ -167,6 +167,9 @@ void AEnemy::HandleCinematicState(bool bIsCinematic)
 void AEnemy::BeginPlay()
 {
 	Super::BeginPlay();
+
+	GetCapsuleComponent()->CanCharacterStepUpOn = ECB_No;
+	GetMesh()->CanCharacterStepUpOn = ECB_No;
 
 	if (PawnSensing)	
 		PawnSensing->OnSeePawn.AddDynamic(this, &AEnemy::PawnSeen);
