@@ -389,6 +389,9 @@ private:
 	
 	ECharacterState CharacterState = ECharacterState::ECS_Unequipped;
 
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	TSubclassOf<class AWeapon> DefaultWeaponClass;
+
 	UPROPERTY(BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	EActionState ActionState = EActionState::EAS_Unoccupied;
 

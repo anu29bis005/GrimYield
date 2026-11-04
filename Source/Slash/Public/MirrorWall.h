@@ -10,6 +10,9 @@
 class USceneComponent;
 class UStaticMeshComponent;
 class ALever;
+class UAudioComponent;
+class USoundBase;
+class UNiagaraComponent;
 
 DECLARE_MULTICAST_DELEGATE(FOnPuzzleSolved);
 DECLARE_MULTICAST_DELEGATE(FOnMirrorFinishedRising);
@@ -56,9 +59,22 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* BackWallMesh;
 
+	UPROPERTY(VisibleAnywhere, Category = "Visual Effects")
+	UNiagaraComponent* DustParticles;
+
+	UPROPERTY(VisibleAnywhere, Category = "Audio")
+	UAudioComponent* MovementAudio;
+	UPROPERTY(EditAnywhere, Category = "Audio")
+	USoundBase* RaiseSound;
+	UPROPERTY(EditAnywhere, Category = "Audio")
+	float RaiseSoundStartTime = 0.f;
+	UPROPERTY(EditAnywhere, Category = "Audio")
+	USoundBase* LowerSound;
+	UPROPERTY(EditAnywhere, Category = "Audio")
+	float LowerSoundStartTime = 0.f;
+
 	UPROPERTY(EditAnywhere, Category = "MirrorWall")
 	float RaiseHeight = 500.f;
-
 	UPROPERTY(EditAnywhere, Category = "MirrorWall")
 	float RaiseSpeed = 150.f;
 	UPROPERTY(EditAnywhere, Category = "Movement")

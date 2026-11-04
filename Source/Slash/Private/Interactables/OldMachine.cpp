@@ -13,6 +13,8 @@
 #include "Components/SceneCaptureComponent2D.h"
 #include "QuestComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Components/AudioComponent.h"
+#include "TimerManager.h"
 
 AOldMachine::AOldMachine()
 {
@@ -50,6 +52,9 @@ AOldMachine::AOldMachine()
 	GateCapture = CreateDefaultSubobject<USceneCaptureComponent2D>(TEXT("GateCapture"));
 	GateCapture->SetupAttachment(Root);
 
+	MachineAudio = CreateDefaultSubobject<UAudioComponent>(TEXT("MachineAudio"));
+	MachineAudio->SetupAttachment(Root);
+	MachineAudio->bAutoActivate = false;
 	
 }
 
@@ -177,6 +182,14 @@ void AOldMachine::Tick(float DeltaTime)
 	{
 		bHandleRotating = false;
 
+		GetWorldTimerManager().SetTimer(
+			AudioStopTimer,
+			this,
+			&AOldMachine::StopMachineAudio,
+			0.15f,
+			false
+		);
+
 		if (FMath::IsNearlyEqual(
 			CurrentHandleAngle,
 			-360.f,
@@ -264,6 +277,14 @@ void AOldMachine::OnBoxEndOverlap(UPrimitiveComponent * OverlappedComponent, AAc
 	
 }
 
+void AOldMachine::StopMachineAudio()
+{
+	if (MachineAudio)
+	{
+		MachineAudio->FadeOut(0.15, 0.f);
+	}
+}
+
 void AOldMachine::Interact(AProtagonist* Protagonist)
 {
 	if (!canPlayerUseMachine(Protagonist))
@@ -312,6 +333,12 @@ bool AOldMachine::RotateHandle()
 		return false;
 	}
 	
+	GetWorldTimerManager().ClearTimer(AudioStopTimer);
+	if (MachineAudio && !MachineAudio->IsPlaying())
+	{
+		MachineAudio->Play();
+	}
+
 	TargetHandleAngle -= RotationPerClick;
 
 	TargetHandleAngle = FMath::Clamp(
@@ -348,6 +375,9 @@ void AOldMachine::ResetIncompleteInteraction(AProtagonist* Protagonist)
 	{
 		return;
 	}
+
+	GetWorldTimerManager().ClearTimer(AudioStopTimer);
+	StopMachineAudio();
 
 	// Stop any unfinished LMB rotation immediately.
 	bHandleRotating = false;

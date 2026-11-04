@@ -1,8 +1,9 @@
-// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "MirrorWall.h"
 #include "Components/StaticMeshComponent.h"
 #include "Interactables/Lever.h"
+#include "Components/AudioComponent.h"
+#include "NiagaraComponent.h"
 
 
 AMirrorWall::AMirrorWall()
@@ -19,6 +20,15 @@ AMirrorWall::AMirrorWall()
 
 	BackWallMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BackWallMesh"));
 	BackWallMesh->SetupAttachment(SceneRoot);
+
+	MovementAudio = CreateDefaultSubobject<UAudioComponent>(TEXT("MovementAudio"));
+	MovementAudio->SetupAttachment(SceneRoot);
+	MovementAudio->bAutoActivate = false;
+
+	DustParticles = CreateDefaultSubobject<UNiagaraComponent>(TEXT("DustParticles"));
+	DustParticles->SetupAttachment(SceneRoot);
+	DustParticles->SetRelativeLocation(FVector(0.f, 0.f, -100.f));
+	DustParticles->bAutoActivate = false;
 }
 
 
@@ -131,6 +141,15 @@ void AMirrorWall::Tick(float DeltaTime)
 
 		SetActorTickEnabled(false);
 
+		if (MovementAudio)
+		{
+			MovementAudio->Stop();
+		}
+
+		if (DustParticles)
+		{
+			DustParticles->Deactivate();
+		}
 
 		if (bMirrorWallLowering)
 		{
@@ -161,14 +180,21 @@ void AMirrorWall::RaiseMirrorWall()
 	}
 
 	bPuzzleSolved = true;
-
 	TargetLocation = InitialLocation;
-
 	TargetLocation.Z += RaiseHeight;
-
 	bMirrorWallMoving = true;
-
 	SetActorTickEnabled(true);
+
+	if (MovementAudio && RaiseSound)
+	{
+		MovementAudio->SetSound(RaiseSound);
+		MovementAudio->Play(RaiseSoundStartTime);
+	}
+
+	if (DustParticles)
+	{
+		DustParticles->Activate(true);
+	}
 
 	UE_LOG(LogTemp, Warning, TEXT("MirrorWall: Raising"));
 }
@@ -181,11 +207,15 @@ void AMirrorWall::LowerMirrorWall()
 	}
 
 	TargetLocation = InitialLocation;
-
 	bMirrorWallLowering = true;
 	bMirrorWallMoving = true;
-
 	SetActorTickEnabled(true);
+
+	if (MovementAudio && LowerSound)
+	{
+		MovementAudio->SetSound(LowerSound);
+		MovementAudio->Play(LowerSoundStartTime);
+	}
 
 	UE_LOG(LogTemp, Warning, TEXT("MirrorWall: Lowering"));
 }

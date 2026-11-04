@@ -6,6 +6,7 @@
 #include "InteractionType.h"
 #include "OldMachine.generated.h"
 
+class UAudioComponent;
 class UStaticMeshComponent;
 class UBoxComponent;
 class UWidgetComponent;
@@ -60,6 +61,8 @@ protected:
 
 private:
 
+	void StopMachineAudio();
+
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* Root;
 
@@ -86,6 +89,12 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	USceneCaptureComponent2D* GateCapture;
+
+	UPROPERTY(VisibleAnywhere, Category = "Audio")
+	UAudioComponent* MachineAudio;
+
+	FTimerHandle AudioStopTimer;
+
 
 	UPROPERTY(EditAnywhere, Category = "Interaction")
 	EInteractionType InteractionType = EInteractionType::EIT_Use;

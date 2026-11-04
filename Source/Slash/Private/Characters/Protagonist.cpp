@@ -924,6 +924,20 @@ void AProtagonist::BeginPlay()
 
 	}
 
+	if (DefaultWeaponClass)
+	{
+		AWeapon* DefaultWeapon = GetWorld()->SpawnActor<AWeapon>(DefaultWeaponClass);
+
+		if (DefaultWeapon)
+		{
+			EquippedWeapon = DefaultWeapon;
+			DefaultWeapon->Equip(GetMesh(), 
+				FName("SpineSocket"), 
+				this, 
+				this);
+		}
+	}
+
 	ActionState = EActionState::EAS_Cinematic;
 	EnableCharacterMovement(false);
 
