@@ -15,6 +15,7 @@ class UWidgetComponent;
 class AGrimNPC;
 class AEnemy;
 class ACratePlatform;
+class USoundBase;
 
 
 UCLASS()
@@ -87,6 +88,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	UWidgetComponent* InteractionWidget;
+
+	UPROPERTY(EditAnywhere, Category = "Audio")
+	USoundBase* GateOpenSound;
 
 	UPROPERTY(VisibleAnywhere, Category = "Gate")
 	EGateState GateState = EGateState::EGS_Locked;

@@ -9,6 +9,7 @@
 #include "Items/Treasure.h"
 #include "Items/Weapons/Weapon.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Kismet/GameplayStatics.h"
 
 AChest::AChest()
 {
@@ -101,6 +102,19 @@ void AChest::OpenLidPhaseOne()
 	bLidAnimating = true;
 
 	SetActorTickEnabled(true);
+
+	if (ChestOpenSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(
+			this,
+			ChestOpenSound,
+			GetActorLocation(),
+			FRotator::ZeroRotator,
+			1.f,
+			1.f,
+			OpenSoundStartTime
+		);
+	}
 }
 
 void AChest::OpenLidPhaseTwo()

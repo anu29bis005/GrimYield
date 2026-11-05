@@ -11,6 +11,7 @@
 #include "Enemy/Enemy.h"
 #include "QuestComponent.h"
 #include "Interactables/CratePlatform.h"
+#include "Kismet/GameplayStatics.h"
 
 AGate::AGate()
 {
@@ -121,6 +122,15 @@ void AGate::Interact(AProtagonist* Protagonist)
         TargetDoorRotation = ClosedDoorRotation;
         TargetDoorRotation.Yaw -= OpenAngle;
         SetActorTickEnabled(true);  // Setting tick only while opening
+
+        if (GateOpenSound)
+        {
+            UGameplayStatics::PlaySoundAtLocation(
+                this,
+                GateOpenSound,
+                GetActorLocation()
+            );
+        }
     }
 
     else

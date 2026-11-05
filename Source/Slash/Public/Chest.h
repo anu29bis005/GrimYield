@@ -15,6 +15,7 @@ class UArrowComponent;
 class UWidgetComponent;
 class USceneComponent;
 class AProtagonist;
+class USoundBase;
 
 UCLASS()
 class SLASH_API AChest : public AActor, public IInteractInterface
@@ -93,6 +94,11 @@ private:
 	/** Press E Widget */
 	UPROPERTY(VisibleAnywhere, Category = "Chest")
 	UWidgetComponent* InteractionWidget;
+
+	UPROPERTY(EditAnywhere, Category = "Audio")
+	USoundBase* ChestOpenSound;
+	UPROPERTY(EditAnywhere, Category = "Audio")
+	float OpenSoundStartTime = 0.f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Chest", meta = (AllowPrivateAccess = "true"))
 	EChestState ChestState = EChestState::ECS_Closed;

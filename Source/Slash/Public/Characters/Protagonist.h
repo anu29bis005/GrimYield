@@ -461,7 +461,7 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Montages")
 	UAnimMontage* MainMenuMontage;
 
-	UPROPERTY();
+	UPROPERTY()
 	UProtagonistOverlay* ProtagonistOverlay;
 
 	// Tracks the peak Z-height reached during a fall or jump
