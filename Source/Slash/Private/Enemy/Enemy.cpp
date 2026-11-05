@@ -103,6 +103,15 @@ void AEnemy::SetDormant(bool bDormant)
 	}
 }
 
+void AEnemy::SetQuestOutline(bool bEnable)
+{
+	if (GetMesh())
+	{
+		GetMesh()->SetRenderCustomDepth(bEnable);
+		GetMesh()->SetCustomDepthStencilValue(1);
+	}
+}
+
 void AEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -125,6 +134,9 @@ float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AC
 	{
 		return 0.f;
 	}
+
+	if (bIsQuestTarget)
+		SetQuestOutline(true);
 
 	if (bIsDormant)
 	{
@@ -226,6 +238,8 @@ void AEnemy::Die_Implementation()
 	EnemyState = EEnemyState::EES_Dead;
 	
 	OnEnemyDeath.Broadcast();
+
+	SetQuestOutline(false);
 
 	ClearAttackTimer();
 	HideHealthBar();
@@ -381,6 +395,9 @@ void AEnemy::ShowHealthBar()
 
 void AEnemy::LoseInterest()
 {
+	if (bIsQuestTarget)
+		SetQuestOutline(false);
+
 	CombatTarget = nullptr;
 	HideHealthBar();
 }
@@ -512,6 +529,9 @@ void AEnemy::PawnSeen(APawn* SeenPawn)
 		SeenPawn->ActorHasTag(FName("EngageableTarget"));
 	if (bShouldChaseTarget)
 	{
+		if (bIsQuestTarget) 
+			SetQuestOutline(true);
+
 		CombatTarget = SeenPawn;
 		ClearPatrolTimer();
 		ChaseTarget();

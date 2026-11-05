@@ -31,6 +31,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "AI")
 	void SetDormant(bool bDormant);
 
+	UFUNCTION(BlueprintCallable, Category = "Visuals")
+	void SetQuestOutline(bool bEnable);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Quest Target")
+	bool bIsQuestTarget = false;
+
 	UPROPERTY(BlueprintAssignable, Category = "Combat")
 	FOnEnemyDeath OnEnemyDeath;
 
