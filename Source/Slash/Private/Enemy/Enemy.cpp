@@ -75,10 +75,40 @@ void AEnemy::SetEnemyCinematicHidden(bool bIsHidden)
 	}
 }
 
+void AEnemy::SetDormant(bool bDormant)
+{
+	bIsDormant = bDormant;
+
+	if (bIsDormant)
+	{
+		ClearPatrolTimer();
+		ClearAttackTimer();
+		if (EnemyController)
+		{
+			EnemyController->StopMovement();
+		}
+	}
+
+	else
+	{
+		if (AProtagonist* Player = Cast<AProtagonist>(UGameplayStatics::GetPlayerCharacter(this, 0)))
+		{
+			CombatTarget = Player;
+			ChaseTarget();
+		}
+		else
+		{
+			StartPatrolling();
+		}
+	}
+}
+
 void AEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (isDead()) return;
+
+	if (isDead() || bIsDormant) 
+		return;
 	if (EnemyState > EEnemyState::EES_Patrolling)
 	{
 		CheckCombatTarget();
@@ -94,6 +124,11 @@ float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AC
 	if (isDead())
 	{
 		return 0.f;
+	}
+
+	if (bIsDormant)
+	{
+		SetDormant(false);
 	}
 
 	HandleDamage(DamageAmount);
@@ -282,9 +317,14 @@ void AEnemy::HandleDamage(float DamageAmount)
 void AEnemy::InitializeEnemy()
 {
 	EnemyController = Cast<AAIController>(GetController());
-	MoveToTarget(CurrentPatrolTarget);
+
 	HideHealthBar();
 	SpawnDefaultWeapon();
+
+	if (!bIsDormant)
+	{
+		MoveToTarget(CurrentPatrolTarget);
+	}
 }
 
 void AEnemy::CheckPatrolTarget()
@@ -460,6 +500,11 @@ void AEnemy::SpawnDefaultWeapon()
 
 void AEnemy::PawnSeen(APawn* SeenPawn)
 {
+	if (bIsDormant)
+	{
+		return;
+	}
+
 	const bool bShouldChaseTarget =
 		EnemyState != EEnemyState::EES_Dead &&
 		EnemyState != EEnemyState::EES_Chasing &&

@@ -28,6 +28,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Cinematics")
 	void SetEnemyCinematicHidden(bool bIsHidden);
 
+	UFUNCTION(BlueprintCallable, Category = "AI")
+	void SetDormant(bool bDormant);
+
 	UPROPERTY(BlueprintAssignable, Category = "Combat")
 	FOnEnemyDeath OnEnemyDeath;
 
@@ -128,6 +131,9 @@ private:
 	double PatrolRadius = 200.f;
 
 	FTimerHandle PatrolTimer;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI Navigation", meta = (AllowPrivateAccess = "true"))
+	bool bIsDormant = false;
 
 	UPROPERTY(EditAnywhere, Category = "AI Navigation")
 	float PatrolWaitMin = 5.f;
