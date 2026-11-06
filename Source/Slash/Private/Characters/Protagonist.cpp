@@ -1406,6 +1406,7 @@ void AProtagonist::EquipWeapon(AWeapon* Weapon)
 	CharacterState = ECharacterState::ECS_EquipOneHandedWeapon;
 	OverlappingItem = nullptr;
 	EquippedWeapon = Weapon;
+	Weapon->ShowItemPickupNotification(this);
 }
 
 void AProtagonist::EndAttack()

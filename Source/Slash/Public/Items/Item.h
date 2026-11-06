@@ -25,6 +25,9 @@ public:
 	AItem();
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(BlueprintCallable)
+	void ShowItemPickupNotification(AActor* OtherActor);
+
 protected:
 
 	virtual void BeginPlay() override;
@@ -42,9 +45,6 @@ protected:
 
 	UFUNCTION()
 	virtual void OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
-
-	UFUNCTION(BlueprintCallable)
-	void ShowItemPickupNotification(AActor* OtherActor);
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UStaticMeshComponent* ItemMesh;
