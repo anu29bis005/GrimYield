@@ -213,6 +213,8 @@ void AGameHUD::BeginPlay()
 				{
 					LoadingScreenWidget->AddToViewport(99);
 				}
+
+				InitialShaderCount = FShaderPipelineCache::NumPrecompilesRemaining();
 			}
 
 			GetWorldTimerManager().SetTimer(
@@ -352,6 +354,19 @@ void AGameHUD::CheckInitializationStatus()
 		GetWorldTimerManager().ClearTimer(SplashScreenTimer);
 		StartSplashScreenSequence();
 	}
+}
+
+float AGameHUD::GetShaderCompilationProgress() const
+{
+	if (InitialShaderCount <= 0)
+	{
+		return 1.0f;
+	}
+
+	int32 Remaining = FShaderPipelineCache::NumPrecompilesRemaining();
+	float Progress = 1.0f - (static_cast<float>(Remaining) / static_cast<float>(InitialShaderCount));
+
+	return FMath::Clamp(Progress, 0.0f, 1.0f);
 }
 
 void AGameHUD::ShowLeverControls()

@@ -28,6 +28,9 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "Startup")
 	void OnPreCompilationCompleted();
 
+	UFUNCTION(BlueprintPure, Category = "Startup")
+	float GetShaderCompilationProgress() const;
+
 	UFUNCTION(BlueprintImplementableEvent, Category = "Startup")
 	void OnTitleMusicRestart();
 
@@ -107,6 +110,8 @@ private:
 
 	void StartSplashScreenSequence();
 	void CheckInitializationStatus();
+
+	int32 InitialShaderCount = 0;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Slash")
 	TSubclassOf<class UProtagonistOverlay> ProtagonistOverlayClass;

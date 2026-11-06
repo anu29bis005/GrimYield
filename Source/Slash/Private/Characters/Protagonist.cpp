@@ -35,6 +35,7 @@
 #include "LevelSequence.h"
 #include "LevelSequencePlayer.h"
 #include "LevelSequenceActor.h"
+#include "GrimYieldGameInstance.h"
 
 
 /** PUBLIC FUNCTIONS */
@@ -301,6 +302,14 @@ void AProtagonist::GetHit_Implementation(const FVector& ImpactPoint, AActor* Hit
 
 float AProtagonist::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
+	if (UGrimYieldGameInstance* GI = Cast<UGrimYieldGameInstance>(UGameplayStatics::GetGameInstance(this)))
+	{
+		if (!GI->bIsHardMode)
+		{
+			DamageAmount *= 0.5f;
+		}
+	}
+
 	HandleDamage(DamageAmount);
 	SetHUDHealth();
 	return DamageAmount;

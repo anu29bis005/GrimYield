@@ -15,6 +15,7 @@
 #include "Items/Weapons/Weapon.h"
 #include "Items/Soul.h"
 #include "Items/KeyItem.h"
+#include "GrimYieldGameInstance.h"
 
 
 /** PUBLIC FUNCTIONS */
@@ -133,6 +134,14 @@ float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AC
 	if (isDead())
 	{
 		return 0.f;
+	}
+
+	if (UGrimYieldGameInstance* GI = Cast<UGrimYieldGameInstance>(UGameplayStatics::GetGameInstance(this)))
+	{
+		if (!GI->bIsHardMode)
+		{
+			DamageAmount *= 2.5f;
+		}
 	}
 
 	if (bIsQuestTarget)
