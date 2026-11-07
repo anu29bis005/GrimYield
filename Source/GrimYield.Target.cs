@@ -3,9 +3,9 @@
 using UnrealBuildTool;
 using System.Collections.Generic;
 
-public class SlashTarget : TargetRules
+public class GrimYieldTarget : TargetRules
 {
-	public SlashTarget(TargetInfo Target) : base(Target)
+	public GrimYieldTarget(TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Game;
 		DefaultBuildSettings = BuildSettingsVersion.V5;

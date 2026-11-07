@@ -3,9 +3,9 @@
 using UnrealBuildTool;
 using System.Collections.Generic;
 
-public class SlashEditorTarget : TargetRules
+public class GrimYieldEditorTarget : TargetRules
 {
-	public SlashEditorTarget(TargetInfo Target) : base(Target)
+	public GrimYieldEditorTarget(TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Editor;
 		DefaultBuildSettings = BuildSettingsVersion.V5;
