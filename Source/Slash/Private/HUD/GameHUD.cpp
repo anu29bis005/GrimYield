@@ -53,8 +53,24 @@ void AGameHUD::BeginPlay()
 
 		if (Controller && ProtagonistOverlayClass)
 		{
-			ProtagonistOverlay = CreateWidget<UProtagonistOverlay>(Controller, ProtagonistOverlayClass);
+			ProtagonistOverlay = CreateWidget<UProtagonistOverlay>(
+				Controller, 
+				ProtagonistOverlayClass
+			);
 			ProtagonistOverlay->AddToViewport();
+		}
+
+		if (Controller && CinematicOverlayClass)
+		{
+			CinematicOverlayWidget = CreateWidget<UUserWidget>(
+				Controller,
+				CinematicOverlayClass
+			);
+			if (CinematicOverlayWidget)
+			{
+				CinematicOverlayWidget->AddToViewport(5);
+				CinematicOverlayWidget->SetVisibility(ESlateVisibility::Hidden);
+			}
 		}
 
 		if (Controller && LeverControlWidgetClass)
@@ -369,13 +385,28 @@ float AGameHUD::GetShaderCompilationProgress() const
 	return FMath::Clamp(Progress, 0.0f, 1.0f);
 }
 
+void AGameHUD::ShowCinematicOverlay()
+{
+	if (CinematicOverlayWidget)
+	{
+		CinematicOverlayWidget->SetVisibility(ESlateVisibility::Visible);
+	}
+}
+
+void AGameHUD::HideCinematicOverlay()
+{
+	if (CinematicOverlayWidget)
+	{
+		CinematicOverlayWidget->SetVisibility(ESlateVisibility::Hidden);
+	}
+}
+
 void AGameHUD::ShowLeverControls()
 {
 	if (LeverControlWidget)
 	{
 		LeverControlWidget->SetLeverMode();
-		LeverControlWidget->SetVisibility(ESlateVisibility::Visible
-		);
+		LeverControlWidget->SetVisibility(ESlateVisibility::Visible);
 	}
 }
 
@@ -384,8 +415,7 @@ void AGameHUD::ShowInspectionControls()
 	if (LeverControlWidget)
 	{
 		LeverControlWidget->SetInspectionMode();
-		LeverControlWidget->SetVisibility(ESlateVisibility::Visible
-		);
+		LeverControlWidget->SetVisibility(ESlateVisibility::Visible);
 	}
 }
 

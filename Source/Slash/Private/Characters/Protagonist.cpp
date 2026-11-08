@@ -206,6 +206,7 @@ void AProtagonist::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 		EnhancedInputComponent->BindAction(ObjectiveAction,ETriggerEvent::Completed,this,&AProtagonist::ObjectiveReleased);
 		EnhancedInputComponent->BindAction(ObjectiveAction,ETriggerEvent::Canceled,this,&AProtagonist::ObjectiveReleased);
 		EnhancedInputComponent->BindAction(JournalAction, ETriggerEvent::Started, this, &AProtagonist::ToggleJournal);
+		EnhancedInputComponent->BindAction(SkipAction, ETriggerEvent::Triggered, this, &AProtagonist::SkipCutscene);
 	}
 }
 
@@ -1037,6 +1038,19 @@ void AProtagonist::Landed(const FHitResult& Hit)
 	}
 }
 
+void AProtagonist::SkipCutscene()
+{
+	if (ActionState == EActionState::EAS_Cinematic && ActiveSequencePlayer)
+	{
+		if (ActiveSequencePlayer->IsPlaying())
+		{
+			EndCinematicState();
+			ActiveSequencePlayer->GoToEndAndStop();
+			ActiveSequencePlayer = nullptr;
+		}
+	}
+}
+
 void AProtagonist::Movement(const FInputActionValue& Value)
 {
 	const FVector2D MovementVector = Value.Get<FVector2D>();
@@ -1784,6 +1798,7 @@ void AProtagonist::BeginCinematicState()
 	{
 		GameHUD->SetObjectiveTrackerSuppressed(true);
 		GameHUD->HideGameplayHUD();
+		GameHUD->ShowCinematicOverlay();
 	}
 
 	OnCinematicStateToggled.Broadcast(true);
@@ -1806,6 +1821,7 @@ void AProtagonist::EndCinematicState()
 	{
 		GameHUD->SetObjectiveTrackerSuppressed(false);
 		GameHUD->ShowGameplayHUD();
+		GameHUD->HideCinematicOverlay();
 	}
 
 	OnCinematicStateToggled.Broadcast(false);
@@ -1823,7 +1839,7 @@ void AProtagonist::PlayIntroductionSequence()
 
 	ALevelSequenceActor* SequenceActor = nullptr;
 
-	ULevelSequencePlayer* SequencePlayer =
+	ActiveSequencePlayer =
 		ULevelSequencePlayer::CreateLevelSequencePlayer(
 			GetWorld(),
 			IntroductionSequence,
@@ -1831,14 +1847,14 @@ void AProtagonist::PlayIntroductionSequence()
 			SequenceActor
 		);
 
-	if (SequencePlayer)
+	if (ActiveSequencePlayer)
 	{
-		SequencePlayer->OnFinished.AddDynamic(
+		ActiveSequencePlayer->OnFinished.AddDynamic(
 			this,
 			&AProtagonist::OnIntroductionSequenceFinished
 		);
 
-		SequencePlayer->Play();
+		ActiveSequencePlayer->Play();
 	}
 }
 
@@ -1865,21 +1881,21 @@ void AProtagonist::PlayCageCutscene()
 	FMovieSceneSequencePlaybackSettings PlaybackSettings;
 	ALevelSequenceActor* SequenceActor = nullptr;
 
-	ULevelSequencePlayer* SequencePlayer = ULevelSequencePlayer::CreateLevelSequencePlayer(
+	ActiveSequencePlayer = ULevelSequencePlayer::CreateLevelSequencePlayer(
 		GetWorld(),
 		CageCutsceneSequence,
 		PlaybackSettings,
 		SequenceActor
 	);
 
-	if (SequencePlayer)
+	if (ActiveSequencePlayer)
 	{
-		SequencePlayer->OnFinished.AddDynamic(
+		ActiveSequencePlayer->OnFinished.AddDynamic(
 			this,
 			&AProtagonist::EndCinematicState
 		);
 
-		SequencePlayer->Play();
+		ActiveSequencePlayer->Play();
 	}
 }
 

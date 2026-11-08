@@ -34,6 +34,12 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "Startup")
 	void OnTitleMusicRestart();
 
+	UFUNCTION(BlueprintCallable, Category = "HUD")
+	void ShowCinematicOverlay();
+
+	UFUNCTION(BlueprintCallable, Category = "HUD")
+	void HideCinematicOverlay();
+
 	void ShowLeverControls();
 	void ShowInspectionControls();
 	void ShowOldMachineControls();
@@ -116,6 +122,9 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Slash")
 	TSubclassOf<class UProtagonistOverlay> ProtagonistOverlayClass;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
+	TSubclassOf<UUserWidget> CinematicOverlayClass;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Slash")
 	TSubclassOf<UContextControlWidget> LeverControlWidgetClass;
 
@@ -160,6 +169,9 @@ private:
 
 	UPROPERTY()
 	UProtagonistOverlay* ProtagonistOverlay;
+
+	UPROPERTY()
+	UUserWidget* CinematicOverlayWidget;
 
 	UPROPERTY()
 	UContextControlWidget* LeverControlWidget;

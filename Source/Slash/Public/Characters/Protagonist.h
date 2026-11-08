@@ -185,6 +185,18 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputAction* ObjectiveAction;
 
+	/* <Skipping-cinematics properties and functions> */
+
+	UPROPERTY(EditAnywhere, Category = "Input")
+	UInputAction* SkipAction;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Cinematics")
+	ULevelSequencePlayer* ActiveSequencePlayer;
+
+	void SkipCutscene();
+
+	/* </Skipping-cinematics properties and functions> */
+
 	/** <Callbacks for Input> */
 	void Movement(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
