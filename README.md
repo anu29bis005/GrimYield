@@ -2,7 +2,7 @@
 
 **GrimYield** is an indie dark fantasy action-adventure game developed in Unreal Engine 5.6 under the moniker WolfWail. Set in a bleak, atmospheric world, the game follows a Norse Viking warrior who ventures deep into a haunted forest to hunt down demonic monsters and claim their souls.
 
-*(Insert a link to a YouTube gameplay overview or a high-quality GIF of your game here)*
+*Take a look at the GrimYield Gameplay Showcase here: https://youtu.be/QOCcvkaQu1U*
 
 ## Technical Overview
 This repository serves as a programming portfolio showcasing the core C++ architecture and systems engineering behind the game. To maintain a lightweight and accessible repository, heavy engine assets (such as 3D meshes, animations, and uncompressed audio) have been deliberately excluded.
