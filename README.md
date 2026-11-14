@@ -2,7 +2,7 @@
 
 **GrimYield** is an indie dark fantasy action-adventure game developed in Unreal Engine 5.6 under the moniker WolfWail. Set in a bleak, atmospheric world, the game follows a Norse Viking warrior who ventures deep into a haunted forest to hunt down demonic monsters and claim their souls.
 
-Note: To download the playable build and test GrimYield for yourself, head over to my itch.io page: https://wolfwail.itch.io/grimyield
+Note: To download the playable build and test GrimYield for yourself, head over to my itch.io page: https://wolfwail.itch.io/grimyield 
 *Take a look at the GrimYield Gameplay Showcase here : https://youtu.be/QOCcvkaQu1U*
 
 ## Technical Overview
